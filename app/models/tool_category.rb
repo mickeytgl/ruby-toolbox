@@ -1,0 +1,2 @@
+class ToolCategory < ApplicationRecord
+end
