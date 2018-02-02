@@ -99,3 +99,4 @@ tool_categories = ToolCategory.create([
     },
 
   ])
+
