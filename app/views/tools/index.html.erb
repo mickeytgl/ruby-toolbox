@@ -1,32 +1,21 @@
-<h1>Check out all the options near you!</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Git Host</th>
+      <th>Repo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tools.each do |tool| %>
+    <tr>
+      <td><%= tool.name %></td>
+      <td><%= tool.description %></td>
+      <td><%= tool.git_host %></td>
+      <td><%= tool.repo %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
 
-<div class="row">
-<div class="col col-lg-6">
-<% @tools.each do |tool| %> 
-  <div class="row">
-    <div class="col-md-4">
-
-    </div>
-    <div class="col-md-6">
-      <p><%= tool.name %></p>
-      <p><%= tool.description %></p>
-      <p><%= link_to "See what's cooking", tool_path(tool.slug)  %></p>
-    </div>
-
-  </div>
-<% end %>
-</div>
-</div>
-
-<div>
-  <ul>
-    <li>Name: <%= (Gems.info 'rails_admin')["name"] %></li>
-    <li>Description: <%= (Gems.info 'rails_admin')["info"] %></li>
-    <li>Score: <%= (Gems.info 'rails_admin')["downloads"] %></li>
-    <li>Created at: <%= (Gems.versions 'rails_admin').last["created_at"] %> </li>
-    <li>Updated at: <%= (Gems.versions 'rails_admin').first["created_at"] %></li>
-  </ul>
-  
-  
-<%= (Gems.info 'rails_admin') %>
-</div>
