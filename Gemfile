@@ -32,6 +32,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'gems', '~> 1.0'
 
 gem 'friendly_id', '~> 5.2', '>= 5.2.3'
+gem 'bootstrap', '~> 4.0.0'
+gem 'jquery-rails', '~> 4.3', '>= 4.3.1'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
