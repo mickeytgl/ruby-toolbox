@@ -1,0 +1,16 @@
+<h2>Home page!</h2>
+
+
+<div class="row">
+  <% @tool_categories.each do |tool|%>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+
+        <%= link_to "#{tool.name}", tools_category_path(tool) %>
+        <p class="card-text">With supporting <%= tool.description %>.</p>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>

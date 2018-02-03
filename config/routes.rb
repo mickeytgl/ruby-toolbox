@@ -3,6 +3,6 @@ Rails.application.routes.draw do
     resources :tools
   end
 
-  root to: 'tools#index'
+  root to: 'home#index'
 
 end
