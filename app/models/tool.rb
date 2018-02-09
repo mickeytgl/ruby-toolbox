@@ -10,6 +10,7 @@ class Tool < ApplicationRecord
       Tool.create! row.to_hash
     end
   end
+end
 
 
 end
