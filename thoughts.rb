@@ -1,18 +1,3 @@
-def info(gem_name)
-  response = get("https://rubygems.org/api/v1/gems/#{gem_name}.json")
-  JSON.parse(response)
-end
-
-def versions(gem_name)
-  response = get("https://rubygems.org/api/v1/versions/#{gem_name}.json")
-  JSON.parse(response)
-end
-
-def downloads(gem_name, gem_version)
-  response = get("https://rubygems.org/api/v1/downloads/#{gem_name}-#{gem_version}")
-  JSON.parse(response)
-end
-
 def update_tool_attributes 
   #Loop through my tools
   tools = Tool.all
