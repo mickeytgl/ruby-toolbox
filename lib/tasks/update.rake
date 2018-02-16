@@ -20,7 +20,7 @@ namespace :update do
           :description => Gems.info(tool.name)["info"]
           #git_host: info["source_code_uri"] #Is this the same value just without the repo name at the end?
           #repo: info["source_code_uri"]
-          #gem_name: info["name"]
+          :gem_name: Gems.info(tool.name)["name"]
           #last_commit_at: #Isn't this something we should get from the GitHub API?? Cant't find anything equivalent in the rubygems.org API
           #last_release_at: versions.first["created_at"]
           #score: info["version_downloads"] #curent version download number?? 

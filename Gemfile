@@ -34,6 +34,8 @@ gem 'gems', '~> 1.0'
 gem 'friendly_id', '~> 5.2', '>= 5.2.3'
 gem 'bootstrap', '~> 4.0.0'
 gem 'jquery-rails', '~> 4.3', '>= 4.3.1'
+gem 'whenever', '~> 0.10.0'
+gem 'github_api', '~> 0.18.2'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
