@@ -6,19 +6,17 @@ namespace :update do
 
   task tools: :environment do
 
-
-    puts Gems.info("rails")["name"]
-
     def update_tool_attributes 
       #Loop through my tools
       counter = 0
       tools = Tool.all
       tools.each do |tool|
+        @tool_url = tool.repo
         tool.update(
           :name => Gems.info(tool.name)["name"],
           #slug: #friendly_url gem takes care of this
           :description => Gems.info(tool.name)["info"],
-          :git_host => "github",
+          :git_host => "github"  ,
           :repo => Gems.info(tool.name)["source_code_uri"],
           :gem_name => Gems.info(tool.name)["name"],
           :last_commit_at => find_last_commit(tool.git_host),
@@ -45,7 +43,17 @@ end
       send("find_last_commit_#{git_host}")
     end
 
-    def find_last_commit_github(author = 'mickeytgl', repo = 'plateform')
+    def find_last_commit_github(author = get_author_name(@tool_url), repo = get_repo_name(@tool_url))
       github = Github.new 
       github.repos.commits.list(author, repo).first["commit"]["committer"]["date"]
+    end
+
+    def get_author_name(url)
+      trimmed_url = url.scan(/github\.com.*/).first.split("/")
+      return trimmed_url[1]
+    end
+
+    def get_repo_name(url)
+      trimmed_url = url.scan(/github\.com.*/).first.split("/")
+      return trimmed_url[2]
     end
