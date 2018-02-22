@@ -11,7 +11,6 @@ namespace :update do
       counter = 0
       tools = Tool.all
       tools.each do |tool|
-        @tool_url = tool.repo
         tool.update(
           :name => Gems.info(tool.name)["name"],
           #slug: #friendly_url gem takes care of this
@@ -19,12 +18,16 @@ namespace :update do
           :git_host => "github"  ,
           :repo => Gems.info(tool.name)["source_code_uri"],
           :gem_name => Gems.info(tool.name)["name"],
-          :last_commit_at => find_last_commit(tool.git_host),
           :last_release_at => Gems.versions(tool.name).first["created_at"]
           #score: Manually inserted
           #useful_links: ???
           #gorails_screencast_link: ???
         )
+
+        @tool_url = tool.repo
+        tool.update(:last_commit_at => find_last_commit(tool.git_host)) unless tool.repo.to_s.empty? 
+
+
         puts "#{tool.errors.full_messages.join(",")}" if tool.errors.any?
         puts "#{tool.name} was updated"
         counter += 1

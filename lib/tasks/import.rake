@@ -8,7 +8,7 @@ namespace :import do
 
     CSV.foreach(filename, headers: true) do |row|
       tool = Tool.create(
-        tool_category: ToolCategory.where( name: row["Category"]).first,
+        tool_category: ToolCategory.find_or_create_by( name: row["Category"]),
         name: row["Name"],
         description: row["Description"],
         git_host: row["repository-href"],
