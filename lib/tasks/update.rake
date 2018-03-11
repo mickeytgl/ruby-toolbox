@@ -3,36 +3,36 @@ require 'gems'
 
 namespace :update do 
   desc "It updates the ruby tools from the rubygems API"
-
   task tools: :environment do
 
     def update_tool_attributes 
-      #Loop through my tools
-      counter = 0
-      tools = Tool.all
-      tools.each do |tool|
+      updated = 0
+      Tool.find_each do |tool|
+        next if tool.gem_name.nil?
+
+        puts "\nUpdating #{tool.gem_name}"
+        tool_gem    = Gems.info(tool.name)
+        gem_version = Gems.versions(tool.name)
+
         tool.update(
-          :name => Gems.info(tool.name)["name"],
-          #slug: #friendly_url gem takes care of this
-          :description => Gems.info(tool.name)["info"],
-          :git_host => "github"  ,
-          :repo => Gems.info(tool.name)["source_code_uri"],
-          :gem_name => Gems.info(tool.name)["name"],
-          :last_release_at => Gems.versions(tool.name).first["created_at"]
-          #score: Manually inserted
-          #useful_links: ???
-          #gorails_screencast_link: ???
+          name:            tool_gem["name"],
+          description:     tool_gem["info"],
+          git_host:        "github"  ,
+          repo:            tool_gem["source_code_uri"],
+          gem_name:        tool_gem["name"],
+          last_release_at: gem_version.first["created_at"]
+          last_commit_at:  find_ast_commit("github", tool_gem["source_code_uri"])
         )
 
-        @tool_url = tool.repo
-        tool.update(:last_commit_at => find_last_commit(tool.git_host)) unless tool.repo.to_s.empty? 
-
-
-        puts "#{tool.errors.full_messages.join(",")}" if tool.errors.any?
-        puts "#{tool.name} was updated"
-        counter += 1
+        if tools.errors.any?
+          puts "#{tool.name} failed to update: #{tool.errors.full_messages.join(",")}"
+        else
+          puts "#{tool.name} was updated"
+          updated += 1
+        end
       end
-      puts "#{counter} tools were updated"
+
+      puts "#{updated} tools were updated"
     end
 
     update_tool_attributes
@@ -42,21 +42,20 @@ end
 
   private
 
-    def find_last_commit(git_host)
-      send("find_last_commit_#{git_host}")
+    def find_last_commit(git_host, uri)
+      return nil if url.blank?
+      send("find_last_commit_#{git_host}", url)
     end
 
-    def find_last_commit_github(author = get_author_name(@tool_url), repo = get_repo_name(@tool_url))
-      github = Github.new 
-      github.repos.commits.list(author, repo).first["commit"]["committer"]["date"]
+    def find_last_commit_github(url)
+      puts url
+      author, repo = get_author_and_repo_name(url)
+      Github.new.repos.commits.list(author, repo).first["commit"]["committer"]["date"]
+    rescue Github::Error::NotFound
+      puts "#{url} was not found"
+      nil
     end
 
-    def get_author_name(url)
-      trimmed_url = url.scan(/github\.com.*/).first.split("/")
-      return trimmed_url[1]
-    end
-
-    def get_repo_name(url)
-      trimmed_url = url.scan(/github\.com.*/).first.split("/")
-      return trimmed_url[2]
+    def get_author_and_repo_name(url)
+      url.split("/").last(2)
     end
